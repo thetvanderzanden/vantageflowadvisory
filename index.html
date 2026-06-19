@@ -640,6 +640,40 @@
 
     .form-state.error h3 { color: var(--magenta); }
 
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children inside a reveal-group */
+    .reveal-group > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal-group.visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .reveal-group.visible > *:nth-child(2) { transition-delay: 0.15s; }
+    .reveal-group.visible > *:nth-child(3) { transition-delay: 0.25s; }
+    .reveal-group.visible > *:nth-child(4) { transition-delay: 0.35s; }
+    .reveal-group.visible > *:nth-child(5) { transition-delay: 0.45s; }
+    .reveal-group.visible > *:nth-child(6) { transition-delay: 0.55s; }
+    .reveal-group.visible > *:nth-child(7) { transition-delay: 0.60s; }
+    .reveal-group.visible > *:nth-child(8) { transition-delay: 0.65s; }
+    .reveal-group.visible > *:nth-child(9) { transition-delay: 0.70s; }
+
+    .reveal-group.visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .hero-inner { flex-direction: column-reverse; text-align: center; }
@@ -695,8 +729,8 @@
   <main id="main-content">
 
   <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stats-inner">
+  <div class="stats-bar reveal">
+    <div class="stats-inner reveal-group">
       <div class="stat">
         <div class="stat-number">30+</div>
         <div class="stat-label">Years of Leadership Experience</div>
@@ -723,10 +757,10 @@
   <!-- ABOUT -->
   <section id="about" aria-labelledby="about-heading">
     <div class="section-inner">
-      <div class="about-grid">
+      <div class="about-grid reveal">
         <div class="about-text">
-          <span class="section-tag">Who We Are</span>
-          <h2 class="section-title" id="about-heading">A Premium Consultancy Built for Real Results</h2>
+          <span class="section-tag reveal">Who We Are</span>
+          <h2 class="section-title reveal" id="about-heading">A Premium Consultancy Built for Real Results</h2>
           <p>Vantage Flow Advisory, Inc. is a premium consultancy specializing in the intersection of Executive Leadership Coaching and Sales &amp; Marketing Training.</p>
           <p>We serve the Legal industry, Private Medical, Start-ups, Technology companies, and Main Street businesses seeking to grow through understanding the deeper complexities of managing people and bringing the very best out of their teams.</p>
           <p>Our mission is to put our clients' needs first. We approach each client as our life source — helping reduce employee churn, increase revenue, and improve profit margin.</p>
@@ -756,11 +790,11 @@
   <!-- SERVICES -->
   <section id="services" aria-labelledby="services-heading">
     <div class="section-inner">
-      <span class="section-tag">What We Do</span>
-      <h2 class="section-title" id="services-heading">Full-Service Advisory &amp; Digital Solutions</h2>
-      <p class="section-subtitle">We provide a well-rounded portfolio of services to empower your organization and its business leaders.</p>
+      <span class="section-tag reveal">What We Do</span>
+      <h2 class="section-title reveal" id="services-heading">Full-Service Advisory &amp; Digital Solutions</h2>
+      <p class="section-subtitle reveal">We provide a well-rounded portfolio of services to empower your organization and its business leaders.</p>
 
-      <div class="services-grid">
+      <div class="services-grid reveal-group">
 
         <div class="service-card">
           <div class="service-icon icon-purple">🎯</div>
@@ -823,11 +857,11 @@
   <!-- MARKETS -->
   <section id="markets" aria-labelledby="markets-heading">
     <div class="section-inner">
-      <span class="section-tag">Who We Serve</span>
-      <h2 class="section-title" id="markets-heading">Target Markets</h2>
-      <p class="section-subtitle">Our diverse client base spans multiple industries and revenue tiers, served through a three-tiered market matrix.</p>
+      <span class="section-tag reveal">Who We Serve</span>
+      <h2 class="section-title reveal" id="markets-heading">Target Markets</h2>
+      <p class="section-subtitle reveal">Our diverse client base spans multiple industries and revenue tiers, served through a three-tiered market matrix.</p>
 
-      <div class="markets-grid">
+      <div class="markets-grid reveal-group">
         <div class="market-tier">
           <span class="tier-badge tier-a">Tier A</span>
           <h3>Small Companies</h3>
@@ -868,11 +902,11 @@
   <!-- SWOT -->
   <section id="swot" aria-labelledby="swot-heading">
     <div class="section-inner">
-      <span class="section-tag">Our Position</span>
-      <h2 class="section-title" id="swot-heading">S.W.O.T. Analysis</h2>
-      <p class="section-subtitle">Transparent about where we stand — and committed to turning every challenge into an opportunity.</p>
+      <span class="section-tag reveal">Our Position</span>
+      <h2 class="section-title reveal" id="swot-heading">S.W.O.T. Analysis</h2>
+      <p class="section-subtitle reveal">Transparent about where we stand — and committed to turning every challenge into an opportunity.</p>
 
-      <div class="swot-grid">
+      <div class="swot-grid reveal-group">
         <div class="swot-card swot-s">
           <h3>Strengths</h3>
           <ul>
@@ -919,11 +953,11 @@
   <!-- TEAM -->
   <section id="team" aria-labelledby="team-heading">
     <div class="section-inner">
-      <span class="section-tag">Our Team</span>
-      <h2 class="section-title" id="team-heading">Leadership You Can Trust</h2>
-      <p class="section-subtitle">Our team brings decades of real-world experience in leadership, strategy, sales, marketing, and technology.</p>
+      <span class="section-tag reveal">Our Team</span>
+      <h2 class="section-title reveal" id="team-heading">Leadership You Can Trust</h2>
+      <p class="section-subtitle reveal">Our team brings decades of real-world experience in leadership, strategy, sales, marketing, and technology.</p>
 
-      <div class="team-grid">
+      <div class="team-grid reveal-group">
         <div class="team-card">
           <div class="team-avatar avatar-magenta">CL</div>
           <h3>Christopher Lachmann</h3>
@@ -949,11 +983,11 @@
   <!-- CONTACT -->
   <section id="contact" aria-labelledby="contact-heading">
     <div class="section-inner">
-      <span class="section-tag">Get in Touch</span>
-      <h2 class="section-title" id="contact-heading">Ready to Transform Your Organization?</h2>
-      <p class="contact-subtitle">Partner with Vantage Flow Advisory to modernize your leadership culture, accelerate revenue, and build the organization you've envisioned.</p>
+      <span class="section-tag reveal">Get in Touch</span>
+      <h2 class="section-title reveal" id="contact-heading">Ready to Transform Your Organization?</h2>
+      <p class="contact-subtitle reveal">Partner with Vantage Flow Advisory to modernize your leadership culture, accelerate revenue, and build the organization you've envisioned.</p>
 
-      <div class="contact-cards">
+      <div class="contact-cards reveal-group">
         <a href="mailto:chris@vantageflowadvisory.com" class="contact-card">
           <div class="contact-card-icon">✉️</div>
           <div class="contact-card-label">Email Us</div>
@@ -1066,6 +1100,20 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Scroll reveal — fires once when element enters viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-group').forEach(el => observer.observe(el));
+  </script>
 
   <script>
     const backdrop = document.getElementById('modal-backdrop');
