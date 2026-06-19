@@ -1111,7 +1111,19 @@
       btn.textContent = 'Sending…';
 
       const formData = new FormData(this);
+
+      // Ensure captcha was completed before submitting
+      if (!formData.get('h-captcha-response')) {
+        btn.disabled = false;
+        btn.textContent = 'Send My Request';
+        alert('Please complete the captcha before submitting.');
+        return;
+      }
+
       const data = Object.fromEntries(formData.entries());
+      // Remove captcha token — Web3Forms can't validate it without the secret key
+      // hCaptcha is used as a client-side gate only; Web3Forms honeypot handles spam server-side
+      delete data['h-captcha-response'];
 
       try {
         const res = await fetch('https://api.web3forms.com/submit', {
