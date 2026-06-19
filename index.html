@@ -119,6 +119,9 @@
 
   <!-- Favicon placeholder (replace with actual icon) -->
   <link rel="icon" type="image/jpeg" href="1000043082.jpg" />
+
+  <!-- hCaptcha — replace data-sitekey in the form with your key from hcaptcha.com -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <style>
     :root {
       --purple: #4B2882;
@@ -531,6 +534,112 @@
       background: linear-gradient(90deg, var(--purple), var(--magenta), var(--blue));
     }
 
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,10,20,0.7);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; transition: opacity 0.25s;
+    }
+
+    .modal-backdrop.open { opacity: 1; }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 18px;
+      width: 100%; max-width: 580px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 2.5rem;
+      position: relative;
+      transform: translateY(24px); transition: transform 0.25s;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-backdrop.open .modal-box { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      background: var(--light-bg); border: none; cursor: pointer;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: 1.2rem; color: var(--text-light);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .modal-close:hover { background: var(--magenta); color: var(--white); }
+
+    .modal-header { margin-bottom: 0.5rem; }
+
+    .modal-header h2 {
+      font-size: 1.5rem; font-weight: 800; color: var(--dark);
+    }
+
+    .modal-header p { font-size: 0.92rem; color: var(--text-light); margin-top: 0.4rem; }
+
+    .modal-divider {
+      height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--magenta), var(--blue));
+      margin: 1.25rem 0;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+
+    .form-group label {
+      font-size: 0.82rem; font-weight: 600; color: var(--dark);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #DDD;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(74,40,130,0.12);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    .captcha-wrap { margin-bottom: 1.25rem; }
+
+    .form-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: var(--white); border: none; cursor: pointer;
+      padding: 0.9rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; font-family: inherit;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 4px 18px rgba(74,40,130,0.3);
+    }
+
+    .form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .form-state { display: none; text-align: center; padding: 2rem 1rem; }
+    .form-state.visible { display: block; }
+
+    .form-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    .form-state h3 { font-size: 1.3rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+    .form-state p { color: var(--text-light); font-size: 0.95rem; }
+
+    .form-state.error h3 { color: var(--magenta); }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .hero-inner { flex-direction: column-reverse; text-align: center; }
@@ -571,7 +680,7 @@
         <h1>Driving Revenue Through <span>Expert Leadership &amp; Sales Transformation</span></h1>
         <p>We bridge the gap between high-level strategy and frontline execution, helping organizations build high-performance cultures that deliver consistent, predictable revenue growth.</p>
         <div class="hero-actions">
-          <a href="#contact" class="btn-primary">Schedule a Consultation</a>
+          <button class="btn-primary" onclick="openModal()">Schedule a Consultation</button>
           <a href="#services" class="btn-secondary">Explore Services</a>
         </div>
       </div>
@@ -862,7 +971,7 @@
         </div>
       </div>
 
-      <a href="mailto:chris@vantageflowadvisory.com" class="contact-cta">Schedule Your Free Consultation</a>
+      <button class="contact-cta" onclick="openModal()">Schedule Your Free Consultation</button>
     </div>
   </section>
 
@@ -874,6 +983,159 @@
   <footer role="contentinfo">
     <p>&copy; 2026 Vantage Flow Advisory, Inc. &mdash; Portland, Oregon &mdash; <a href="mailto:chris@vantageflowadvisory.com">chris@vantageflowadvisory.com</a></p>
   </footer>
+
+
+  <!-- CONSULTATION MODAL -->
+  <div id="modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+
+      <!-- Form view -->
+      <div id="form-view">
+        <div class="modal-header">
+          <h2 id="modal-title">Schedule Your Free Consultation</h2>
+          <p>Tell us about your business and we'll be in touch within one business day.</p>
+        </div>
+        <div class="modal-divider"></div>
+
+        <!--
+          =====================================================
+          SETUP REQUIRED — two free keys needed:
+
+          1. Web3Forms access key:
+             → Go to https://web3forms.com
+             → Enter tony@vztechsolutions.com and click "Create Access Key"
+             → Replace YOUR_WEB3FORMS_KEY below with the key you receive
+
+          2. hCaptcha site key:
+             → Go to https://dashboard.hcaptcha.com/signup
+             → Add your site (vantageflowadvisors.com) and copy the Site Key
+             → Replace YOUR_HCAPTCHA_SITE_KEY below with your key
+          =====================================================
+        -->
+        <form id="consultation-form">
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY" />
+          <input type="hidden" name="subject" value="New Consultation Request — Vantage Flow Advisory" />
+          <input type="hidden" name="from_name" value="Vantage Flow Advisory Website" />
+          <!-- Honeypot spam trap -->
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+
+          <div class="form-group">
+            <label for="f-name">Full Name <span aria-hidden="true">*</span></label>
+            <input type="text" id="f-name" name="name" required placeholder="Jane Smith" autocomplete="name" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-email">Email Address <span aria-hidden="true">*</span></label>
+              <input type="email" id="f-email" name="email" required placeholder="jane@company.com" autocomplete="email" />
+            </div>
+            <div class="form-group">
+              <label for="f-phone">Phone Number</label>
+              <input type="tel" id="f-phone" name="phone" placeholder="(503) 555-0100" autocomplete="tel" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="f-business">Business / Organization <span aria-hidden="true">*</span></label>
+            <input type="text" id="f-business" name="business" required placeholder="Acme Corp" autocomplete="organization" />
+          </div>
+
+          <div class="form-group">
+            <label for="f-message">Tell us about your business <span aria-hidden="true">*</span></label>
+            <textarea id="f-message" name="message" required placeholder="Brief description of your business and what challenges you're looking to address..."></textarea>
+          </div>
+
+          <div class="captcha-wrap">
+            <div class="h-captcha" data-sitekey="YOUR_HCAPTCHA_SITE_KEY"></div>
+          </div>
+
+          <button type="submit" class="form-submit" id="submit-btn">Send My Request</button>
+        </form>
+      </div>
+
+      <!-- Success view -->
+      <div id="success-view" class="form-state">
+        <div class="form-state-icon">✅</div>
+        <h3>Request Received!</h3>
+        <p>Thank you — we'll be in touch within one business day to schedule your consultation.</p>
+      </div>
+
+      <!-- Error view -->
+      <div id="error-view" class="form-state error">
+        <div class="form-state-icon">⚠️</div>
+        <h3>Something went wrong</h3>
+        <p id="error-msg">Please try again or email us directly at <a href="mailto:chris@vantageflowadvisory.com">chris@vantageflowadvisory.com</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const backdrop = document.getElementById('modal-backdrop');
+
+    function openModal() {
+      backdrop.hidden = false;
+      requestAnimationFrame(() => backdrop.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+      document.getElementById('f-name').focus();
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      setTimeout(() => {
+        backdrop.hidden = true;
+        document.body.style.overflow = '';
+        // Reset form back to initial state
+        document.getElementById('form-view').style.display = '';
+        document.getElementById('success-view').classList.remove('visible');
+        document.getElementById('error-view').classList.remove('visible');
+        document.getElementById('consultation-form').reset();
+        if (window.hcaptcha) hcaptcha.reset();
+      }, 250);
+    }
+
+    // Close on backdrop click
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !backdrop.hidden) closeModal(); });
+
+    // Form submission
+    document.getElementById('consultation-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const json = await res.json();
+
+        if (json.success) {
+          document.getElementById('form-view').style.display = 'none';
+          document.getElementById('success-view').classList.add('visible');
+        } else {
+          document.getElementById('error-msg').textContent = json.message || 'Submission failed. Please try again.';
+          document.getElementById('error-view').classList.add('visible');
+          btn.disabled = false;
+          btn.textContent = 'Send My Request';
+        }
+      } catch (err) {
+        document.getElementById('error-view').classList.add('visible');
+        btn.disabled = false;
+        btn.textContent = 'Send My Request';
+      }
+    });
+  </script>
 
 </body>
 </html>
