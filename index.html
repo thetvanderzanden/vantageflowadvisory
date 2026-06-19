@@ -120,8 +120,6 @@
   <!-- Favicon placeholder (replace with actual icon) -->
   <link rel="icon" type="image/jpeg" href="1000043082.jpg" />
 
-  <!-- hCaptcha — replace data-sitekey in the form with your key from hcaptcha.com -->
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <style>
     :root {
       --purple: #4B2882;
@@ -1048,9 +1046,6 @@
             <textarea id="f-message" name="message" required placeholder="Brief description of your business and what challenges you're looking to address..."></textarea>
           </div>
 
-          <div class="captcha-wrap">
-            <div class="h-captcha" data-sitekey="1664171c-ad96-48a2-9ce0-95086c2cf8de"></div>
-          </div>
 
           <button type="submit" class="form-submit" id="submit-btn">Send My Request</button>
         </form>
@@ -1112,18 +1107,7 @@
 
       const formData = new FormData(this);
 
-      // Ensure captcha was completed before submitting
-      if (!formData.get('h-captcha-response')) {
-        btn.disabled = false;
-        btn.textContent = 'Send My Request';
-        alert('Please complete the captcha before submitting.');
-        return;
-      }
-
       const data = Object.fromEntries(formData.entries());
-      // Remove captcha token — Web3Forms can't validate it without the secret key
-      // hCaptcha is used as a client-side gate only; Web3Forms honeypot handles spam server-side
-      delete data['h-captcha-response'];
 
       try {
         const res = await fetch('https://api.web3forms.com/submit', {
